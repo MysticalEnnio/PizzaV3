@@ -480,7 +480,7 @@ function initNewSession(ingredients, options) {
       }
       fs.writeFile("data.json", JSON.stringify(data), (err) => {
         if (err) {
-          log("error while writing to data file", 1);
+          log("error while writing to data file: " + err, 1);
           return reject(err);
         }
         initSessionFile(currentSession, ingredients, options, resolve, reject);
