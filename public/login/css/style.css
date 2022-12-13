@@ -1,0 +1,231 @@
+input:not(:placeholder-shown) ~ label {
+  top: -1.25rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+input[type="checkbox"]:not(:placeholder-shown) ~ label {
+  font-size: clamp(12px, 4vmin, 16px) !important;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes revealContent {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes reveal {
+  0% {
+    height: 0vh;
+    top: 0;
+  }
+  40% {
+    height: 105vh;
+  }
+  50% {
+    bottom: 0;
+  }
+  60% {
+    height: 100vh;
+    bottom: 0;
+  }
+  100% {
+    height: 0vh;
+    bottom: 0;
+  }
+}
+
+@keyframes shake {
+  from,
+  to {
+    transform: translate3d(0, 0, 0);
+    color: #f87171;
+  }
+
+  20%,
+  60% {
+    transform: translate3d(-3px, 0, 0);
+  }
+
+  40%,
+  80% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+body {
+  animation: 1s cubic-bezier(0.4, 0, 0.2, 1) 0s 1 revealContent;
+  overflow: hidden;
+}
+
+#revealer {
+  width: 100vw;
+  background-color: rgb(107 114 128);
+  position: absolute;
+  z-index: 999;
+  animation: 1s cubic-bezier(0.4, 0, 0.2, 1) 0s 1 reveal;
+  overflow: hidden;
+}
+
+.underlineLink {
+  --line: rgb(107 114 128);
+  text-decoration: none;
+  position: relative;
+}
+.underlineLink span {
+  background-image: linear-gradient(0deg, var(--line) 0%, var(--line) 100%);
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  background-size: var(--background-size, 100%) 1px;
+  transition: background-size 0.2s cubic-bezier(1, 0, 0.5, 0.5)
+    var(--background-delay, 0.15s);
+  font-size: clamp(12px, 4vmin, 16px);
+  line-height: 20px;
+  transform: translateZ(0);
+}
+.underlineLink svg {
+  vertical-align: top;
+  display: inline;
+  line-height: 1;
+  width: 13px;
+  height: 20px;
+  position: relative;
+  left: -2px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1px;
+  stroke: var(--line);
+  stroke-dasharray: 7.95 30;
+  stroke-dashoffset: var(--stroke-dashoffset, 46);
+  transition: stroke-dashoffset var(--stroke-duration, 0.15s)
+    var(--stroke-easing, ease-in) var(--stroke-delay, 0s);
+}
+.underlineLink:hover {
+  --background-size: 0%;
+  --background-delay: 0s;
+  --stroke-dashoffset: 26;
+  --stroke-duration: 0.3s;
+  --stroke-easing: cubic-bezier(0.3, 1.5, 0.5, 1);
+  --stroke-delay: 0.195s;
+}
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+* {
+  box-sizing: inherit;
+}
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+#loader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(1em);
+  backdrop-filter: blur(1em);
+}
+
+.lds-spinner {
+  color: official;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-spinner div {
+  transform-origin: 40px 40px;
+  animation: lds-spinner 1.2s linear infinite;
+}
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 37px;
+  width: 6px;
+  height: 18px;
+  border-radius: 20%;
+  background: #3d9fdd;
+}
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+@keyframes lds-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

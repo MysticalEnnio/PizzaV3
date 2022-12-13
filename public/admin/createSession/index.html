@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/index.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body
+    class="box-border bg-zinc-800 bg-[url('https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/image_2022-11-15_161746140_XPQDnwkoI.png')] bg-cover bg-blend-multiply bg-center bg-no-repeat"
+  >
+    <div
+      class="w-screen h-screen flex items-center flex-col text-white bg-gradient-to-t from-black via-transparent to-black md:bg-gradient-to-r"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6 absolute top-4 left-4 cursor-pointer"
+        onclick="history.pushState(null,'', '/'); location.reload()"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+        />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6 absolute top-4 left-12 cursor-pointer text-white"
+        onclick="window.location.href = '/admin'"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+        />
+      </svg>
+      <h1 class="text-8xl text-white font-semibold font-ghostink">
+        Create Session
+      </h1>
+      <div
+        class="h-3/4 min-h-[75vmin] w-[90vmin] max-w-[50vh] border border-white/[.1] rounded-lg bg-black/[.5] flex flex-col p-5 m-auto"
+      >
+        <div>
+          <h2 class="text-white text-5xl font-ghostink mb-2">Zutaten</h2>
+          <div
+            class="text-white text-xl w-full flex flex-wrap mb-6"
+            id="ingredientsWrapper"
+          ></div>
+        </div>
+        <div>
+          <h2 class="text-white text-5xl font-ghostink mb-2">Optionen</h2>
+          <div
+            class="text-white text-xl w-full flex flex-wrap mb-6"
+            id="optionsWrapper"
+          ></div>
+        </div>
+        <button
+          id="order"
+          class="bg-white/[.1] text-white w-1/2 mx-auto mt-auto py-1 px-2 rounded-lg transition-all duration-300 focus:w-3/5 focus:opacity-0"
+          onclick="fadeOutSection(this.parentElement, createSession())"
+        >
+          Erstellen
+        </button>
+      </div>
+    </div>
+    <template id="selectableTemplate">
+      <div
+        class="cursor-pointer border border-white/[.2] rounded-lg bg-black/[.5] p-1 px-2 m-1 h-min select-none"
+        onclick="this.classList.toggle('bg-rtg-4/[.5]')"
+      >
+        Salami
+      </div>
+    </template>
+  </body>
+</html>

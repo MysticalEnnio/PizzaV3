@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" async />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+      async
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
+      defer
+    ></script>
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="js/index.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body
+    class="h-screen w-screen bg-zinc-800 bg-[url('https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/image_2022-11-15_161746140_XPQDnwkoI.png')] bg-cover bg-blend-multiply bg-center bg-no-repeat"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6 absolute top-4 left-4 cursor-pointer text-white"
+      onclick="history.pushState(null,'', '/'); location.reload()"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+      />
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6 absolute top-4 left-12 cursor-pointer text-white"
+      onclick="window.location.href = '/admin'"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+      />
+    </svg>
+
+    <div
+      class="h-full w-full bg-gradient-to-t from-black via-transparent to-black md:bg-gradient-to-r"
+    >
+      <div class="h-full w-full flex flex-col justify-between items-center">
+        <h1 class="text-8xl mt-2 text-white font-semibold font-ghostink">
+          Orders
+        </h1>
+        <div
+          class="swiper h-3/4 min-h-[75vmin] w-[90vmin] max-w-[50vh] m-auto border border-white/[.1] rounded-lg bg-black/[.5] p-5"
+        >
+          <div class="swiper-wrapper text-white" id="ordersWrapper"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+      </div>
+    </div>
+    <template id="orderTemplate">
+      <div class="swiper-slide flex flex-col px-5">
+        <div class="w-fit max-w-full mx-auto">
+          <h1
+            class="text-4xl font-ghostink font-serif max-w-fit w-fit font-semibold text-ellipsis"
+          >
+            Bestellung von
+            <span class="orderName text-rtg-1">Ennioooooooooo</span>
+          </h1>
+          <br />
+          <hr class="border-white/[.1]" />
+          <br />
+          <h3 class="orderComment text-2xl text-rtg-2 w-max"></h3>
+          <br />
+          <hr class="border-white/[.1]" />
+          <br />
+          <div
+            class="optionsWrapper text-white text-xl w-full flex flex-wrap"
+          ></div>
+          <br />
+          <hr class="border-white/[.1]" />
+          <br />
+          <div
+            class="ingredientsWrapper text-white text-xl w-full flex flex-wrap"
+          ></div>
+        </div>
+      </div>
+    </template>
+    <template id="optionTemplate">
+      <div
+        class="cursor-pointer border border-white/[.2] rounded-lg bg-black/[.5] p-1 px-2 m-1 h-min odd:bg-pastel-3/[.5] even:bg-pastel-7/[.5] select-none"
+      ></div>
+    </template>
+  </body>
+</html>

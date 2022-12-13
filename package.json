@@ -9,6 +9,14 @@
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "sessions/**/*.*",
+      "public/**/*.*",
+      "data.*"
+    ],
+    "ext": "js,mjs,html"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MysticalEnnio/PizzaV3.git"
@@ -22,8 +30,15 @@
   "homepage": "https://github.com/MysticalEnnio/PizzaV3#readme",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.1.1",
     "body-parser": "^1.20.1",
+    "chalk": "^4.1.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "iconfinder": "^0.2.0",
+    "imagekit": "^4.1.2",
     "pusher": "^5.1.1-beta"
   }
 }
