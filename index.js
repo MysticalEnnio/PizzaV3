@@ -27,14 +27,11 @@ var log = (toLog, error = 0) => {
   console.log(chalk.red("[server]" + chalk.reset.cyan(" " + toLog)));
 };
 
-let sessionsData = [
-  {
-    id: "123456",
-    fileVersion: 0,
-  },
-];
+log("Supabase Api Key: " + process.env.SUPABASE_SERVICE_KEY);
 
-let currentSession = "123456";
+let sessionsData = [];
+
+let currentSession;
 
 var imagekit = new ImageKit({
   publicKey: "public_D202xiGxO/ZlrH8PUHojBH95ft8=",
@@ -146,6 +143,44 @@ app.get("/api/user/makeAdmin", (req, res) => {
     .catch((err) => {
       res.send(err);
     });
+});
+
+app.get("/api/user/setPriority", (req, res) => {
+  if (!req.query.id) {
+    res.send("No id provided");
+    return;
+  }
+  if (!req.query.priority) {
+    res.send("No priority provided");
+    return;
+  }
+  supabase.auth.admin
+    .updateUserById(req.query.id, {
+      user_metadata: { priority: req.query.priority },
+    })
+    .then((data) => {
+      pusher
+        .trigger(
+          "updates",
+          "changePriority",
+          data.data.user.user_metadata.priority
+        )
+        .then(() => {
+          res.send(data);
+        })
+        .catch((err) => log(err, 1));
+      return;
+    })
+    .catch((err) => {
+      log(err, 1);
+      res.status(500).send(err);
+    });
+});
+
+app.get("/api/users/getAll", function (req, res) {
+  supabase.auth.admin.listUsers().then((data) => {
+    res.send(JSON.stringify(data));
+  });
 });
 
 app.post("/api/image/upload/profilePicture", function (req, res) {
@@ -365,6 +400,14 @@ app.all("/api/orders/get", (req, res) => {
 });
 
 app.all("/api/session/data/get", (req, res) => {
+  if (
+    !currentSession ||
+    currentSession.length == 0 ||
+    currentSession == "123456"
+  ) {
+    res.status(500).send("There currently is no session");
+    return;
+  }
   getSessionData(currentSession)
     .then((data) => {
       res.send(data);
@@ -480,7 +523,7 @@ function initNewSession(ingredients, options) {
       }
       fs.writeFile("data.json", JSON.stringify(data), (err) => {
         if (err) {
-          log("error while writing to data file: " + err, 1);
+          log("error while writing to data file", 1);
           return reject(err);
         }
         initSessionFile(currentSession, ingredients, options, resolve, reject);

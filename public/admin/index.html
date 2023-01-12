@@ -5,13 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/admin/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="/admin/js/supabase.js"></script>
+    <script src="js/supabase.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/md5-js@0.0.3/md5.min.js"></script>
-    <script src="/admin/js/index.js"></script>
+    <script src="js/index.js"></script>
     <title>Document</title>
   </head>
   <body
@@ -104,6 +104,13 @@
           onclick="fadeOutSection(this.parentElement, () => window.location.href = '/admin/options')"
         >
           OPTIONS
+        </button>
+        <button
+          class="w-1/2 h-1/4 max-h-8 p-2 rounded-sm flex items-center justify-center font-semibold text-white bg-pastel-3 shadow-xl shadow-pastel-2 transition-all hover:shadow-pastel-2 hover:shadow-lg hover:translate-y-1 active:shadow-md active:translate-y-2 mb-5"
+          id="options"
+          onclick="fadeOutSection(this.parentElement, () => window.location.href = '/admin/users')"
+        >
+          USER MANAGEMENT
         </button>
       </div>
     </div>

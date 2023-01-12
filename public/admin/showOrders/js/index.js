@@ -40,9 +40,16 @@ var pusher = new Pusher("13fcdedc78efac0503d7", {
   cluster: "eu",
 });
 
+let orders = [];
+
 var channel = pusher.subscribe("orders");
-channel.bind("new-order", function (data) {
-  loadOrder(data);
+channel.bind("new-order", function (order) {
+  console.log("new order", order);
+  order = calculateQueuePower(order);
+  orders.push(order);
+  deleteAllOrders();
+  orders = sortOrders(orders);
+  orders.forEach(loadOrder);
 });
 
 let ordersContainer = document.getElementById("ordersWrapper");
@@ -87,9 +94,74 @@ function loadOrder(order) {
   swiper.update();
 }
 
+function deleteAllOrders() {
+  ordersContainer.innerHTML = "";
+}
+
 fetch("/api/orders/get")
   .then((res) => res.json())
   .then((data) => {
     console.log("Orders", data);
-    data.forEach(loadOrder);
+    data.forEach(calculateQueuePower);
+    data = sortOrders(data);
+    console.log("Sorted Orders", data);
+    data.forEach((order) => {
+      orders.push(order);
+      loadOrder(order);
+    });
   });
+
+Array.prototype.insert = function (index, ...items) {
+  this.splice(index, 0, ...items);
+};
+
+function calculateQueuePower(order) {
+  order.queuePower = Math.pow(2, Math.pow(order.priority, 1.12)); //(e.priority - 1) * 2 + 1;
+  order.queuePowerToPass = order.queuePower * 1.1;
+  console.log(
+    `Set queuePower of ${order.name} with priority ${order.priority} to ${order.queuePower}`
+  );
+  return order;
+}
+
+function sortOrders(orders) {
+  console.log("Sorting orders...");
+  //first take out priority 6, after everything sorted put back in order
+  let priorityMaxs = [];
+  orders.forEach((e) => {
+    if (e.priority > 5) {
+      priorityMaxs.push(e);
+    }
+  });
+  orders = orders.filter((e) => e.priority < 6);
+  let currentId = 123456;
+  orders.forEach((e) => {
+    e.id = currentId;
+    currentId += 666;
+  });
+  let queuePowerZero = [];
+
+  while (orders.length - 1 != queuePowerZero.length) {
+    for (let i = 1; i < orders.length; i++) {
+      if (orders[i].queuePower >= orders[i - 1].queuePowerToPass) {
+        orders[i].queuePower -= orders[i - 1].queuePowerToPass;
+        let b = orders[i - 1];
+        orders[i - 1] = orders[i];
+        orders[i] = b;
+        console.log(
+          `${orders[i - 1].name} used ${orders[i].queuePowerToPass} of his ${
+            orders[i - 1].queuePower + orders[i].queuePowerToPass
+          } queuePower to pass ${
+            orders[i].name
+          } and switched his position from ${i} to ${i - 1}`
+        );
+      } else {
+        if (!queuePowerZero.includes(orders[i].id))
+          queuePowerZero.push(orders[i].id);
+      }
+    }
+  }
+
+  priorityMaxs.reverse().forEach((e) => orders.unshift(e));
+  return orders;
+}

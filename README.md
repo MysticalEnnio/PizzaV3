@@ -17,3 +17,15 @@ queuePowerToPass = Priority/2
 | 3        | 5          | 1.5              |
 | 4        | 7          | 2                |
 | 5        | 9          | 2.5              |
+
+or
+
+queuePower = 2^x^1.1
+
+| Priority | queuePower | queuePowerToPass |
+| -------- | ---------- | ---------------- |
+| 1        | 1.5        | 1                |
+| 2        | 3.5        | 2                |
+| 3        | 4          | 4                |
+| 4        | 8          | 8                |
+| 5        | 16         | 16               |

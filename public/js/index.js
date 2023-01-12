@@ -27,6 +27,8 @@ tailwind.config = {
   },
 };
 
+let priority = 1;
+
 document.addEventListener("DOMContentLoaded", async () => {
   let userData = (await getUserData()).data.user;
   if (!userData) window.location.replace("/login");
@@ -36,7 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   console.log(userData);
 
-  let priority = 1;
+  let pusher = new Pusher("13fcdedc78efac0503d7", {
+    cluster: "eu",
+  });
 
   let priorityNumberElement = document.getElementById("priorityNumber");
   let selectableTemplate = document.getElementById("selectableTemplate");
@@ -44,6 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let optionsContainer = document.getElementById("optionsWrapper");
 
   function changePriority(newPriority) {
+    newPriority = Number(newPriority);
     priorityNumberElement.classList.remove("bg-rtg-" + priority);
     priorityNumberElement.classList.add("bg-rtg-" + newPriority);
     if (newPriority > 3 && priority < 4) {
@@ -58,7 +63,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     priority = newPriority;
   }
 
-  setTimeout(() => {
+  if (userData.user_metadata.priority) {
+    changePriority(userData.user_metadata.priority);
+  }
+
+  let channel = pusher.subscribe("updates");
+  channel.bind("changePriority", function (priority) {
+    console.log("Priority changed to " + priority);
+    changePriority(priority);
+  });
+
+  /*setTimeout(() => {
     changePriority(2);
     setTimeout(() => {
       changePriority(3);
@@ -72,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 1000);
       }, 1000);
     }, 1000);
-  }, 1000);
+  }, 1000);*/
 
   let toRadians = (deg) => (deg * Math.PI) / 180;
   let map = (val, a1, a2, b1, b2) => b1 + ((val - a1) * (b2 - b1)) / (a2 - a1);
@@ -273,6 +288,7 @@ function orderPizza() {
   }
   console.log(options);
 
+  priority = Number(priority);
   fetch("/api/orders/new", {
     method: "POST",
     headers: {
@@ -283,6 +299,7 @@ function orderPizza() {
       comment: document.getElementById("commentInput").value,
       ingredients,
       options,
+      priority,
     }),
   })
     .then((res) => res.json())
