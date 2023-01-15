@@ -51,7 +51,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(fileUpload());
 
-app.get(["/", "/post", "/settings"], (req, res, next) => {
+app.get(["/", "/settings"], (req, res, next) => {
   //check cookies if user is verified
   console.log(req.originalUrl);
   if (!req.cookies.id) {
