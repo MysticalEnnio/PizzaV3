@@ -71,9 +71,16 @@ function loadUser(user) {
 function showUserDropdown(event) {
   let x = event.clientX;
   let y = event.clientY;
-  userEditDropdownElement.style.left = `${x + 20}px`;
-  userEditDropdownElement.style.top = `${y}px`;
   userEditDropdownElement.classList.remove("hidden");
+  if (screen.orientation.type == "portrait-primary") {
+    userEditDropdownElement.style.left = `${
+      x - 20 - userEditDropdownElement.offsetWidth
+    }px`;
+    userEditDropdownElement.style.top = `${y - 20}px`;
+  } else {
+    userEditDropdownElement.style.left = `${x + 20}px`;
+    userEditDropdownElement.style.top = `${y}px`;
+  }
   userEditUser = event.target;
 }
 
