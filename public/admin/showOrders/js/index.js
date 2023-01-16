@@ -102,13 +102,15 @@ fetch("/api/orders/get")
   .then((res) => res.json())
   .then((data) => {
     console.log("Orders", data);
-    data.forEach(calculateQueuePower);
-    data = sortOrders(data);
-    console.log("Sorted Orders", data);
-    data.forEach((order) => {
-      orders.push(order);
-      loadOrder(order);
-    });
+    if (data.length != 0) {
+      data.forEach(calculateQueuePower);
+      data = sortOrders(data);
+      console.log("Sorted Orders", data);
+      data.forEach((order) => {
+        orders.push(order);
+        loadOrder(order);
+      });
+    }
   });
 
 Array.prototype.insert = function (index, ...items) {
