@@ -30,6 +30,7 @@ tailwind.config = {
 let usersContainer = document.getElementById("usersWrapper");
 let userTemplate = document.getElementById("userTemplate");
 let userEditDropdownElement = document.getElementById("userEditDropdown");
+let deleteUserButton = document.getElementById("deleteUserButton");
 
 let userEditUser;
 
@@ -51,6 +52,7 @@ getAllUsers().then((users) => {
 
 function loadUser(user) {
   let userElement = userTemplate.content.cloneNode(true);
+  userElement.querySelector("tr").dataset.userid = user.id;
   userElement.querySelector(".userProfilePicture").src =
     user.user_metadata.avatar_url;
   userElement.querySelector(".userName").textContent =
@@ -81,15 +83,30 @@ function showUserDropdown(event) {
     userEditDropdownElement.style.left = `${x + 20}px`;
     userEditDropdownElement.style.top = `${y}px`;
   }
-  userEditUser = event.target;
+  userEditUser = event.target?.parentElement.parentElement.dataset.userid;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("click", (e) => {
-    if (
-      !e.target.classList.contains("userEdit") &&
-      e.target.parentElement.id != "userEditDropdown"
-    )
-      userEditDropdownElement.classList.add("hidden");
+document.addEventListener("click", (e) => {
+  if (
+    !e.target.classList.contains("userEdit") &&
+    e.target.parentElement.id != "userEditDropdown"
+  )
+    userEditDropdownElement.classList.add("hidden");
+});
+
+deleteUserButton.addEventListener("click", () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete user!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      console.log(userEditUser);
+      Swal.fire("Deleted!", "The user has been deleted.", "success");
+    }
   });
 });

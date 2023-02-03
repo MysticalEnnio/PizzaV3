@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/index.js" defer></script>
     <title>Document</title>
@@ -104,7 +104,10 @@
               </svg>
             </div>
           </button>
-          <button class="py-1.5 px-2 hover:bg-white/[.35] transition-all">
+          <button
+            id="deleteUserButton"
+            class="py-1.5 px-2 hover:bg-white/[.35] transition-all"
+          >
             delete user
           </button>
         </div>
