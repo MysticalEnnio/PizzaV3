@@ -34,12 +34,11 @@ let selectableTemplate = document.getElementById("selectableTemplate");
 function addOption() {
   let name = (optionInputElement.value + "").trim();
   if (name.length === 0) return;
+  optionInputElement.value = "";
   fetch("/api/options/new?name=" + name).then((res) => {
     if (res.status != 400) {
       loadSelectables([name]);
     }
-
-    optionInputElement.value = "";
   });
 }
 

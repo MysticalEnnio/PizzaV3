@@ -34,11 +34,11 @@ let selectableTemplate = document.getElementById("selectableTemplate");
 function addIngredient() {
   let name = (ingredientInputElement.value + "").trim();
   if (name.length === 0) return;
+  ingredientInputElement.value = "";
   fetch("/api/ingredients/new?name=" + name).then((res) => {
     if (res.status != 400) {
       loadSelectables([name]);
     }
-    ingredientInputElement.value = "";
   });
 }
 

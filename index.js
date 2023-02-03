@@ -5,11 +5,12 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 var ImageKit = require("imagekit");
 const Pusher = require("pusher");
-const fs = require("fs");
 const chalk = require("chalk");
 const app = express();
 app.set("trust proxy", true);
 const { createClient } = require("@supabase/supabase-js");
+const CyclicDB = require("cyclic-dynamodb");
+const db = CyclicDB("gorgeous-trunks-flyCyclicDB");
 const port = process.env.PORT;
 
 const supabase = createClient(
@@ -19,9 +20,17 @@ const supabase = createClient(
 
 let userData = [];
 
+let sessions = db.collection("sessions");
+
 var log = (toLog, error = 0) => {
   if (error) {
     console.log(chalk.red("[server]" + chalk.reset.red(" " + toLog)));
+    return;
+  }
+  if (typeof toLog == "object") {
+    console.log(
+      chalk.red("[server]" + chalk.reset.cyan(" " + JSON.stringify(toLog)))
+    );
     return;
   }
   console.log(chalk.red("[server]" + chalk.reset.cyan(" " + toLog)));
@@ -222,38 +231,42 @@ app.get("/api/ingredients/new", (req, res) => {
     return;
   }
   log("reading data file to get ingredients");
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (err) {
-      log("error while reading file", 1);
-      return reject(err);
-    }
-    log("data file loaded successfully");
-    if (data != "") {
-      data = JSON.parse(data);
-      log(data.ingredients);
-      if (!data.ingredients) data.ingredients = [req.query.name];
-      if (data.ingredients.find((e) => e == req.query.name)) {
-        res.status(400).send("Ingredient already exist");
+  sessions
+    .get("data")
+    .then((data) => {
+      data = data.props;
+      delete data.updated;
+      delete data.created;
+      log("data file loaded successfully");
+      log(JSON.stringify(data));
+      if (data) {
+        log(data.ingredients);
+        if (!data.ingredients) data.ingredients = [req.query.name];
+        if (data.ingredients.find((e) => e == req.query.name)) {
+          log("ingredient already exist");
+          log(data.ingredients);
+          res.status(400).send("Ingredient already exist");
+          return;
+        }
+        data.ingredients.push(req.query.name);
+        log(data.ingredients);
+        sessions.set("data", data).then(() => {
+          res.send(data.ingredients);
+        });
         return;
       }
-      data.ingredients.push(req.query.name);
-      log(data.ingredients);
-      fs.writeFile("data.json", JSON.stringify(data), () => {
-        res.send(data.ingredients);
-      });
-      return;
-    }
-    fs.writeFile(
-      "data.json",
-      JSON.stringify({ ingredients: [req.query.name] }),
-      () => {}
-    );
-    res.send(
-      data.ingredients
-        ? [...data.ingredients, req.query.name]
-        : [req.query.name]
-    );
-  });
+      log("data file is empty");
+      sessions.set("data", { ingredients: [req.query.name] });
+      res.send(
+        data.ingredients
+          ? [...data.ingredients, req.query.name]
+          : [req.query.name]
+      );
+    })
+    .catch((err) => {
+      log("error while reading file", 1);
+      log(err);
+    });
 });
 
 app.get("/api/ingredients/remove", (req, res) => {
@@ -262,34 +275,42 @@ app.get("/api/ingredients/remove", (req, res) => {
     return;
   }
   log("reading data file to get ingredients");
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (err) {
-      log("error while reading file", 1);
-      return reject(err);
-    }
-    log("data file loaded successfully");
-    if (data != "") {
-      data = JSON.parse(data);
-      if (!data.ingredients) {
-        res.status(400).send("Ingredient does not exist");
+  sessions
+    .get("data")
+    .then((data) => {
+      data = data.props;
+      delete data.updated;
+      delete data.created;
+      log("data file loaded successfully");
+      if (data) {
+        if (!data.ingredients) {
+          res.status(400).send("Ingredient does not exist");
+          return;
+        }
+        data.ingredients = data.ingredients.filter((e) => e != req.query.name);
+        log(data.ingredients);
+        sessions.set("data", data).then(() => {
+          res.send(data.ingredients);
+        });
         return;
       }
-      data.ingredients = data.ingredients.filter((e) => e != req.query.name);
-      log(data.ingredients);
-      fs.writeFile("data.json", JSON.stringify(data), () => {
-        res.send(data.ingredients);
-      });
-      return;
-    }
-    res.status(400).send("Ingredient does not exist");
-  });
+      res.status(400).send("Ingredient does not exist");
+    })
+    .catch((err) => {
+      log("error while reading file", 1);
+      reject(err);
+    });
 });
 
 app.get("/api/ingredients/get", (req, res) => {
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (data != "") {
-      data = JSON.parse(data);
-      res.send(data.ingredients);
+  log("getting data");
+  sessions.get("data").then((data) => {
+    data = data.props;
+    delete data.updated;
+    delete data.created;
+    log(JSON.stringify(data));
+    if (data.ingredients) {
+      res.send(JSON.stringify(data.ingredients));
       return;
     }
     res.send([]);
@@ -302,34 +323,34 @@ app.get("/api/options/new", (req, res) => {
     return;
   }
   log("reading data file to get options");
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (err) {
-      log("error while reading file", 1);
-      return reject(err);
-    }
-    log("data file loaded successfully");
-    if (data != "") {
-      data = JSON.parse(data);
-      if (!data.options) data.options = [req.query.name];
-      else if (data.options.find((e) => e == req.query.name)) {
-        log(data.options.find((e) => e == req.query.name));
-        res.status(400).send("Option already exist");
+  sessions
+    .get("data")
+    .then((data) => {
+      data = data.props;
+      delete data.updated;
+      delete data.created;
+      log("data file loaded successfully");
+      if (data) {
+        if (!data.options) data.options = [req.query.name];
+        else if (data.options.find((e) => e == req.query.name)) {
+          log(data.options.find((e) => e == req.query.name));
+          res.status(400).send("Option already exist");
+          return;
+        } else data.options.push(req.query.name);
+        sessions.set("data", data).then(() => {
+          res.send(data.options);
+        });
         return;
-      } else data.options.push(req.query.name);
-      fs.writeFile("data.json", JSON.stringify(data), () => {
-        res.send(data.options);
-      });
-      return;
-    }
-    fs.writeFile(
-      "data.json",
-      JSON.stringify({ options: [req.query.name] }),
-      () => {}
-    );
-    res.send(
-      data.options ? [...data.optionts, req.query.name] : [req.query.name]
-    );
-  });
+      }
+      sessions.set("data", { options: [req.query.name] });
+      res.send(
+        data.options ? [...data.optionts, req.query.name] : [req.query.name]
+      );
+    })
+    .catch((err) => {
+      log("error while reading file", 1);
+      reject(err);
+    });
 });
 
 app.get("/api/options/remove", (req, res) => {
@@ -338,33 +359,39 @@ app.get("/api/options/remove", (req, res) => {
     return;
   }
   log("reading data file to get options");
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (err) {
-      log("error while reading file", 1);
-      return reject(err);
-    }
-    log("data file loaded successfully");
-    if (data != "") {
-      data = JSON.parse(data);
-      if (!data.options) {
-        res.status(400).send("Option does not exist");
+  sessions
+    .get("data")
+    .then((data) => {
+      data = data.props;
+      delete data.updated;
+      delete data.created;
+      log("data file loaded successfully");
+      if (data) {
+        if (!data.options) {
+          res.status(400).send("Option does not exist");
+          return;
+        }
+        data.options = data.options.filter((e) => e != req.query.name);
+        log(data.options);
+        sessions.set("data", data).then(() => {
+          res.send(data.options);
+        });
         return;
       }
-      data.options = data.options.filter((e) => e != req.query.name);
-      log(data.options);
-      fs.writeFile("data.json", JSON.stringify(data), () => {
-        res.send(data.options);
-      });
-      return;
-    }
-    res.status(400).send("Option does not exist");
-  });
+      res.status(400).send("Option does not exist");
+    })
+    .catch((err) => {
+      log("error while reading file", 1);
+      reject(err);
+    });
 });
 
 app.get("/api/options/get", (req, res) => {
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (data != "") {
-      data = JSON.parse(data);
+  sessions.get("data").then((data) => {
+    data = data.props;
+    delete data.updated;
+    delete data.created;
+    if (data) {
       res.send(data.options);
       return;
     }
@@ -389,6 +416,10 @@ app.post("/api/session/new", (req, res) => {
 });
 
 app.all("/api/orders/get", (req, res) => {
+  if (!currentSession) {
+    res.status(500).send("There currently is no session");
+    return;
+  }
   getOrders(currentSession)
     .then((orders) => {
       res.send(orders);
@@ -420,7 +451,8 @@ app.all("/api/session/data/get", (req, res) => {
 
 function newOrder(order, sessionId) {
   return new Promise(function (resolve, reject) {
-    log("writing new order: " + order);
+    log("writing new order: " + JSON.stringify(order));
+    log("SessionData: " + JSON.stringify(sessionsData));
     currentSessionData = sessionsData.find(
       (session) => session.id === sessionId
     );
@@ -432,65 +464,58 @@ function newOrder(order, sessionId) {
             fileVersion: 0,
           });
       log("No sessionData or fileVersion == 0");
-      fs.readFile(`sessions/${sessionId}/data.json`, (err, data) => {
-        if (data && data != "") {
-          data = JSON.parse(data);
-          data.fileVersion++;
-          data.orders.push(order);
-          fs.writeFile(
-            `sessions/${sessionId}/data.json`,
-            JSON.stringify(data),
-            (err) => {
+      sessions
+        .get(sessionId)
+        .then((data) => {
+          data = data.props;
+          delete data.updated;
+          delete data.created;
+          if (data) {
+            data.fileVersion++;
+            data.orders.push(order);
+            session.set(sessionId, data).then(() => {
               log("file written");
-              if (err) {
-                log(err, 1);
-                reject(err);
-                return;
-              }
               log("no errors while writing file");
               sessionsData.fileVersion++;
               resolve();
-            }
-          );
-          return;
-        }
-        reject("Session file does not exist or is empty");
-      });
+            });
+            return;
+          }
+          reject("Session file does not exist or is empty");
+        })
+        .catch((err) => {
+          log(err, 1);
+          reject(err);
+        });
       return;
     }
     log("Sessiondata exists and version is bigger than 0");
-    fs.readFile(`sessions/${sessionId}/data.json`, (err, data) => {
-      log("data file readen");
-      if (err) {
-        log(err, 1);
-        reject(err);
-        return;
-      }
-      log("no errors while reading file");
-      if (data == "") {
-        reject("Session data file is empty");
-        return;
-      }
-      data = JSON.parse(data);
-      data.fileVersion++;
-      data.orders.push(order);
-      fs.writeFile(
-        `sessions/${sessionId}/data.json`,
-        JSON.stringify(data),
-        (err) => {
+    sessions
+      .get(sessionId)
+      .then((data) => {
+        data = data.props;
+        delete data.updated;
+        delete data.created;
+        log("data file readen");
+        log("no errors while reading file");
+        if (data == "") {
+          reject("Session data file is empty");
+          return;
+        }
+        data.fileVersion++;
+        data.orders.push(order);
+        sessions.set(sessionId, data).then(() => {
           log("file written");
-          if (err) {
-            log(err, 1);
-            reject(err);
-            return;
-          }
           log("no errors while writing file");
           sessionsData.fileVersion++;
           resolve();
           return;
-        }
-      );
-    });
+        });
+      })
+      .catch((er) => {
+        log(err, 1);
+        reject(err);
+      });
   });
 }
 
@@ -498,37 +523,43 @@ function initNewSession(ingredients, options) {
   return new Promise(function (resolve, reject) {
     currentSession = Date.now().toString().slice(3, 9);
     log("creating new session");
-    fs.readFile("data.json", "utf8", (err, data) => {
-      if (err) {
-        log("error while reading data file", 1);
-        return reject(err);
-      }
-      if (data != "") {
-        data = JSON.parse(data);
-        if (data.sessions && data.sessions[currentSession]) {
-          log("session already exists", 1);
-          return reject("session alredy exists");
-        }
-        if (!data.sessions) {
-          data.sessions = [currentSession];
+    sessions
+      .get("data")
+      .then((data) => {
+        data = data.props;
+        delete data.updated;
+        delete data.created;
+        if (data) {
+          if (data.sessions && data.sessions[currentSession]) {
+            log("session already exists", 1);
+            return reject("session alredy exists");
+          }
+          if (!data.sessions) {
+            data.sessions = [currentSession];
+          } else {
+            data.sessions.push(currentSession);
+          }
         } else {
-          data.sessions.push(currentSession);
+          data = {
+            ingredients,
+            options,
+            sessions: [currentSession],
+          };
         }
-      } else {
-        data = {
-          ingredients,
-          options,
-          sessions: [currentSession],
-        };
-      }
-      fs.writeFile("data.json", JSON.stringify(data), (err) => {
-        if (err) {
-          log("error while writing to data file", 1);
-          return reject(err);
-        }
-        initSessionFile(currentSession, ingredients, options, resolve, reject);
+        sessions.set("data", data).then(() => {
+          initSessionFile(
+            currentSession,
+            ingredients,
+            options,
+            resolve,
+            reject
+          );
+        });
+      })
+      .catch((err) => {
+        log("error while writing/reading data file", 1);
+        reject(err);
       });
-    });
   });
 }
 
@@ -540,53 +571,48 @@ async function initSessionFile(
   reject
 ) {
   log("initing new session file");
-  fs.mkdir(`sessions/${sessionId}`, (err) => {
-    log("session folder created");
-    if (err) {
-      log("error while creating session folder", 1);
-      log(err, 1);
-      return reject(err);
-    }
-    log("no errors while creating session folder");
-    fs.writeFile(
-      `sessions/${sessionId}/data.json`,
-      JSON.stringify({
-        fileVersion: 1,
-        ingredients,
-        options,
-        orders: [],
-      }),
-      (err) => {
-        log("file created and written with data");
-        if (err) {
-          log(err, 1);
-          return reject(err);
-        }
-        log("no errors while writing file");
-        if (!sessionsData.find((e) => e.id == sessionId))
-          sessionsData.push({
-            id: sessionId,
-            fileVersion: 1,
-            ingredients,
-            options,
-          });
-        return resolve(JSON.stringify(sessionId));
+  sessions
+    .set(sessionId, {
+      fileVersion: 1,
+      ingredients,
+      options,
+      orders: [],
+    })
+    .then(() => {
+      log("file created and written with data");
+      log("no errors while writing file");
+      if (!sessionsData.find((e) => e.id == sessionId)) {
+        log("adding session to sessionsData");
+        sessionsData.push({
+          id: sessionId,
+          fileVersion: 1,
+          ingredients,
+          options,
+        });
       }
-    );
-  });
+      return resolve(JSON.stringify(sessionId));
+    })
+    .catch((err) => {
+      log(err, 1);
+      reject(err);
+    });
 }
 
 function getOrders(sessionId) {
   return new Promise(function (resolve, reject) {
     log("getting orders for: " + sessionId);
-    fs.readFile(`sessions/${sessionId}/data.json`, (err, data) => {
-      if (err) {
+    sessions
+      .get(sessionId)
+      .then((data) => {
+        data = data.props;
+        log(data);
+        if (!data.orders) data.orders = [];
+        resolve(data.orders);
+      })
+      .catch((err) => {
         log(err, 1);
         reject(err);
-        return;
-      }
-      resolve(JSON.parse(data).orders);
-    });
+      });
   });
 }
 
@@ -594,15 +620,19 @@ function getSessionData(sessionId, options = 0) {
   log("getting session data");
   return new Promise(function (resolve, reject) {
     log("getting ingredients for: " + sessionId);
-    fs.readFile(`sessions/${sessionId}/data.json`, (err, data) => {
-      if (err) {
+    sessions
+      .get(sessionId)
+      .then((data) => {
+        data = data.props;
+        delete data.updated;
+        delete data.created;
+        log("returning data");
+        resolve({ ...data, id: sessionId });
+      })
+      .catch((err) => {
         log(err, 1);
         reject(err);
-        return;
-      }
-      log("returning data");
-      resolve({ ...JSON.parse(data), id: sessionId });
-    });
+      });
   });
 }
 
@@ -611,15 +641,32 @@ app.listen(port, () => {
   require("dns").lookup(require("os").hostname(), function (err, add, fam) {
     log(`server running on http://${add}:${port}`);
   });
-  fs.readFile("data.json", "utf8", (err, data) => {
-    if (data.trim() != "") {
-      data = JSON.parse(data);
-      if (data.sessions) {
-        let lastSession = data.sessions[data.sessions.length - 1];
-        if (Date.now().toString().slice(3, 9) - lastSession < 60)
-          currentSession = lastSession;
-        log("currentSession: " + currentSession);
+  sessions.get("data").then((data) => {
+    data = data.props;
+    if (data.sessions) {
+      log(data.sessions);
+      let lastSession = data.sessions[data.sessions.length - 1];
+      log("lastSession: " + lastSession);
+      log("TimeNow: " + Date.now().toString().slice(3, 9));
+      if (Date.now().toString().slice(3, 9) - parseInt(lastSession) < 60)
+        currentSession = lastSession;
+      if (currentSession) {
+        //get session data from old session
+        sessions.get(currentSession).then((data) => {
+          data = data.props;
+          log("sessionData: " + JSON.stringify(data));
+          if (data) {
+            sessionsData.push({
+              id: currentSession,
+              fileVersion: data.fileVersion,
+              ingredients: data.ingredients,
+              options: data.options,
+            });
+            log("currentSessionData: " + JSON.stringify(sessionsData));
+          }
+        });
       }
+      log("currentSession: " + currentSession);
     }
   });
 });
