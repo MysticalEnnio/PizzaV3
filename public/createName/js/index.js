@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     submitButton.addEventListener("click", () => {
-        if (nameInputEl.value.length == 0) {
+        if (nameInputEl.value.length < 3) {
             nameInputEl.nextElementSibling.classList.add(
                 "animate-[shake_linear_0.3s_1]"
             );
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }, 300);
             return;
         }
-        if (validateName(nameInputEl.value) && nameInputEl.value.length > 4) {
+        if (validateName(nameInputEl.value)) {
             submitName(nameInputEl.value);
         } else {
             nameError.classList.add("animate-[shake_linear_0.3s_1]");

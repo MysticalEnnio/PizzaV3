@@ -106,9 +106,15 @@
           </button>
           <button
             id="deleteUserButton"
-            class="py-1.5 px-2 hover:bg-white/[.35] transition-all"
+            class="py-1.5 px-2 border-b border-white/[.5] hover:bg-white/[.35] transition-all"
           >
             delete user
+          </button>
+          <button
+            id="changeUserNameButton"
+            class="py-1.5 px-2 hover:bg-white/[.35] transition-all"
+          >
+            change name
           </button>
         </div>
       </div>
@@ -116,17 +122,14 @@
     <template id="userTemplate">
       <tr>
         <td class="p-2 pl-0 flex items-center">
-          <img
-            src="https://lh3.googleusercontent.com/a/AEdFTp6-hZthf95IbtfUNRej3J--xK_ZOTa5lYOOgGyv=s96-c"
-            class="userProfilePicture rounded-full h-8 mr-4"
-          />
-          <p class="userName">Ennio</p>
+          <img src="" class="userProfilePicture rounded-full h-8 w-8 mr-4" />
+          <p class="userName"></p>
         </td>
         <td>
-          <p class="userEmail text-[2.5vmin]">mystical.ennio@gmail.com</p>
+          <p class="userEmail text-[2.5vmin]"></p>
         </td>
         <td>
-          <p class="userRole">Admin</p>
+          <p class="userRole"></p>
         </td>
         <td>
           <svg

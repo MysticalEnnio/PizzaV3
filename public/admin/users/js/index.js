@@ -31,6 +31,7 @@ let usersContainer = document.getElementById("usersWrapper");
 let userTemplate = document.getElementById("userTemplate");
 let userEditDropdownElement = document.getElementById("userEditDropdown");
 let deleteUserButton = document.getElementById("deleteUserButton");
+let changeUserNameButton = document.getElementById("changeUserNameButton");
 
 let userEditUser;
 
@@ -94,6 +95,40 @@ document.addEventListener("click", (e) => {
     userEditDropdownElement.classList.add("hidden");
 });
 
+function saveUserData(id, opt) {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/user/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, data: opt }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((err) => {
+        resolve(undefined);
+        swal("Error!", err.message, "error");
+      });
+  });
+}
+
+function deleteUser(id) {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/user/delete?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((err) => {
+        resolve(undefined);
+        swal("Error!", err.message, "error");
+      });
+  });
+}
+
 deleteUserButton.addEventListener("click", () => {
   Swal.fire({
     title: "Are you sure?",
@@ -103,10 +138,38 @@ deleteUserButton.addEventListener("click", () => {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Yes, delete user!",
-  }).then((result) => {
+  }).then(async (result) => {
     if (result.isConfirmed) {
       console.log(userEditUser);
+      const data = await deleteUser(userEditUser);
+      if (!data) return;
       Swal.fire("Deleted!", "The user has been deleted.", "success");
     }
   });
+});
+
+changeUserNameButton.addEventListener("click", async () => {
+  const { value: name } = await Swal.fire({
+    title: "Enter new name",
+    input: "text",
+    inputValue: "",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    inputValidator: (value) => {
+      if (value.length < 2) {
+        return "The name must be at least 2 characters long";
+      }
+    },
+  });
+  if (!name) return;
+
+  console.log("namen", name);
+  const data = await saveUserData(userEditUser, {
+    user_metadata: { realName: name, name: name },
+  });
+
+  if (data)
+    //Show success message using swal with icon success
+    Swal.fire("Changed!", `The users name been changed to ${name}.`, "success");
 });
