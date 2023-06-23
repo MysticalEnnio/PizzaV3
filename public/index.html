@@ -1,150 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/classnames@2.3.2/index.min.js"></script>
-    <script src="js/supabase.js"></script>
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-    <script src="js/index.js"></script>
-    <title>Document</title>
-  </head>
-  <body
-    class="min-h-screen h-fit w-screen overflow-hidden box-border bg-zinc-700 bg-[url('https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/559cc7245678e5abaf783a1312143a27')] bg-cover bg-blend-multiply bg-center bg-no-repeat"
-  >
-    <div
-      class="min-h-screen h-fit w-full bg-gradient-to-t from-black via-transparent to-black md:bg-gradient-to-r p-4 flex items-center flex-col"
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/classnames@2.3.2/index.min.js"></script>
+        <script src="js/supabase.js"></script>
+        <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+        <script src="js/index.js"></script>
+        <title>Document</title>
+    </head>
+    <body
+        class="min-h-screen h-fit w-screen overflow-hidden box-border bg-zinc-700 bg-[url('https://ik.imagekit.io/mystical/559cc7245678e5abaf783a1312143a27')] bg-cover bg-blend-multiply bg-center bg-no-repeat"
     >
-      <nav class="w-full flex justify-between items-center h-min">
+        <!--https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/559cc7245678e5abaf783a1312143a27-->
         <div
-          class="text-white flex h-min bg-black/[.1] border border-white/[.1] shadow-md rounded-md font-semibold font-mono text-[3.5vmin]"
+            class="min-h-screen h-fit w-full bg-gradient-to-t from-black via-transparent to-black md:bg-gradient-to-r p-4 flex items-center flex-col"
         >
-          <p class="mr-2 p-2">PRIORITY</p>
-          <span
-            class="h-full w-full p-2 bg-rtg-1 rounded-r-md transition-all text-white"
-            id="priorityNumber"
-            >1</span
-          >
+            <nav class="w-full flex justify-between items-center h-min">
+                <div
+                    class="text-white flex h-min bg-black/[.1] border border-white/[.1] shadow-md rounded-md font-semibold font-mono text-[3.5vmin]"
+                >
+                    <p class="mr-2 p-2">PRIORITY</p>
+                    <span
+                        class="h-full w-full p-2 bg-rtg-1 rounded-r-md transition-all text-white"
+                        id="priorityNumber"
+                        >1</span
+                    >
+                </div>
+                <h1
+                    class="text-[12vmin] leading-none text-white font-semibold font-ghostink"
+                >
+                    Pizza
+                </h1>
+                <div class="w-[20vmin] flex justify-end">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-[6vmin] text-white cursor-pointer flex justify-end"
+                        onclick="window.location.href = '/settings'"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+                        ></path>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        ></path>
+                    </svg>
+                </div>
+            </nav>
+            <div
+                class="min-h-[60vh] h-fit w-[90vmin] max-w-[50vh] border border-white/[.1] rounded-lg bg-black/[.5] p-5 my-auto"
+            >
+                <section
+                    class="min-h-[60vh] h-fit flex justify-between flex-col"
+                    id="orderPage"
+                >
+                    <div>
+                        <h2 class="text-white text-5xl font-ghostink mb-2">
+                            Zutaten
+                        </h2>
+                        <div
+                            class="text-white text-xl w-full flex flex-wrap mb-6"
+                            id="ingredientsWrapper"
+                        ></div>
+                    </div>
+                    <div>
+                        <h2 class="text-white text-5xl font-ghostink mb-2">
+                            Optionen
+                        </h2>
+                        <div
+                            class="text-white text-xl w-full flex flex-wrap mb-6"
+                            id="optionsWrapper"
+                        ></div>
+                    </div>
+                    <div>
+                        <h2 class="text-white text-5xl font-ghostink mb-2">
+                            Name
+                        </h2>
+                        <input
+                            type="text"
+                            name=""
+                            id="nameInput"
+                            class="w-1/3 min-w-max border-0 border-b-2 bg-transparent text-white text-2xl font-ghostink mb-6"
+                        />
+                    </div>
+                    <div class="mb-6">
+                        <h2 class="text-white text-5xl font-ghostink mb-2">
+                            Anmerkungen
+                        </h2>
+                        <textarea
+                            rows="1"
+                            id="commentInput"
+                            class="bg-transparent w-full align-text-bottom text-white text-2xl border-b-2 scrollbar-hide resize-none"
+                            oninput="autoGrow(this)"
+                        ></textarea>
+                    </div>
+
+                    <button
+                        id="order"
+                        class="bg-white/[.1] text-white w-1/2 mx-auto py-1 px-2 rounded-lg transition-all duration-300 focus:w-3/5 focus:opacity-0"
+                        onclick="fadeOutSection(this.parentElement, orderPizza)"
+                    >
+                        Bestellen
+                    </button>
+                </section>
+                <section
+                    class="min-h-[56vh] h-fit flex items-center justify-center hidden"
+                    id="noSessionPage"
+                >
+                    <h3 class="text-2xl text-white p-4">
+                        Es ist noch keine Pizza-Session vorhanden. Bitte warten
+                        Sie noch einen Moment.
+                    </h3>
+                </section>
+                <canvas id="pizza" class="mx-auto hidden"></canvas>
+            </div>
         </div>
-        <h1
-          class="text-[12vmin] leading-none text-white font-semibold font-ghostink"
-        >
-          Pizza
-        </h1>
-        <div class="w-[20vmin] flex justify-end">
-          <svg
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="h-[6vmin] text-white cursor-pointer flex justify-end"
-            onclick="window.location.href = '/settings'"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-            ></path>
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            ></path>
-          </svg>
-        </div>
-      </nav>
-      <div
-        class="min-h-[60vh] h-fit w-[90vmin] max-w-[50vh] border border-white/[.1] rounded-lg bg-black/[.5] p-5 my-auto"
-      >
-        <section
-          class="min-h-[60vh] h-fit flex justify-between flex-col"
-          id="orderPage"
+            class="w-[6vmin] absolute bottom-4 left-4 text-white cursor-pointer hidden"
+            id="adminButton"
+            onclick="window.location.href = '/admin'"
         >
-          <div>
-            <h2 class="text-white text-5xl font-ghostink mb-2">Zutaten</h2>
-            <div
-              class="text-white text-xl w-full flex flex-wrap mb-6"
-              id="ingredientsWrapper"
-            ></div>
-          </div>
-          <div>
-            <h2 class="text-white text-5xl font-ghostink mb-2">Optionen</h2>
-            <div
-              class="text-white text-xl w-full flex flex-wrap mb-6"
-              id="optionsWrapper"
-            ></div>
-          </div>
-          <div>
-            <h2 class="text-white text-5xl font-ghostink mb-2">Name</h2>
-            <input
-              type="text"
-              name=""
-              id="nameInput"
-              class="w-1/3 min-w-max border-0 border-b-2 bg-transparent text-white text-2xl font-ghostink mb-6"
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"
             />
-          </div>
-          <div class="mb-6">
-            <h2 class="text-white text-5xl font-ghostink mb-2">Anmerkungen</h2>
-            <textarea
-              rows="1"
-              id="commentInput"
-              class="bg-transparent w-full align-text-bottom text-white text-2xl border-b-2 scrollbar-hide resize-none"
-              oninput="autoGrow(this)"
-            ></textarea>
-          </div>
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
+            />
+        </svg>
 
-          <button
-            id="order"
-            class="bg-white/[.1] text-white w-1/2 mx-auto py-1 px-2 rounded-lg transition-all duration-300 focus:w-3/5 focus:opacity-0"
-            onclick="fadeOutSection(this.parentElement, orderPizza)"
-          >
-            Bestellen
-          </button>
-        </section>
-        <section
-          class="min-h-[56vh] h-fit flex items-center justify-center hidden"
-          id="noSessionPage"
-        >
-          <h3 class="text-2xl text-white p-4">
-            Es ist noch keine Pizza-Session vorhanden. Bitte warten Sie noch
-            einen Moment.
-          </h3>
-        </section>
-        <canvas id="pizza" class="mx-auto hidden"></canvas>
-      </div>
-    </div>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-[6vmin] absolute bottom-4 left-4 text-white cursor-pointer hidden"
-      id="adminButton"
-      onclick="window.location.href = '/admin'"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"
-      />
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
-      />
-    </svg>
-
-    <template id="selectableTemplate">
-      <div
-        class="cursor-pointer border border-white/[.2] rounded-lg bg-black/[.5] p-1 px-2 m-1 h-min select-none"
-        onclick="this.classList.toggle('bg-rtg-3/[.5]')"
-      ></div>
-    </template>
-  </body>
+        <template id="selectableTemplate">
+            <div
+                class="cursor-pointer border border-white/[.2] rounded-lg bg-black/[.5] p-1 px-2 m-1 h-min select-none"
+                onclick="this.classList.toggle('bg-rtg-3/[.5]')"
+            ></div>
+        </template>
+    </body>
 </html>
