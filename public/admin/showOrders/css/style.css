@@ -1,4 +1,13 @@
 @font-face {
-  font-family: "GHOSTINK";
-  src: url("/fonts/Ghostink.otf"), url("/fonts/Ghostink.ttf");
+    font-family: "GHOSTINK";
+    src: url("/fonts/Ghostink.otf"), url("/fonts/Ghostink.ttf");
+}
+
+body {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
