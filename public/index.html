@@ -14,7 +14,7 @@
         <title>Document</title>
     </head>
     <body
-        class="min-h-screen h-fit w-screen overflow-hidden box-border bg-zinc-700 bg-[url('https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/559cc7245678e5abaf783a1312143a27')] bg-cover bg-blend-multiply bg-center bg-no-repeat"
+        class="min-h-screen h-fit w-screen overflow-hidden box-border bg-zinc-700 bg-[url('https://ik.imagekit.io/mystical/tr:f-jpg,pr-true/559cc7245678e5abaf783a1312143a27')] bg-cover bg-blend-multiply bg-center bg-no-repeat overflow-y-scroll"
     >
         <div
             class="min-h-screen h-fit w-full bg-gradient-to-t from-black via-transparent to-black md:bg-gradient-to-r p-4 flex items-center flex-col"
@@ -105,6 +105,21 @@
                             oninput="autoGrow(this)"
                         ></textarea>
                     </div>
+                    <div class="mb-6">
+                        <h2 class="text-white text-5xl font-ghostink mb-2">
+                            Priority: <span id="priorityValue">3</span>
+                        </h2>
+                        <!--slider from a to 6-->
+                        <input
+                            type="range"
+                            min="1"
+                            max="6"
+                            value="3"
+                            class="slider w-full h-2 bg-transparent"
+                            id="priorityInput"
+                            oninput="document.getElementById('priorityValue').textContent = this.value"
+                        />
+                    </div>
 
                     <button
                         id="order"
@@ -132,7 +147,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-[6vmin] absolute bottom-4 left-4 text-white cursor-pointer hidden"
+            class="w-[6vmin] fixed bottom-4 left-4 text-white cursor-pointer hidden"
             id="adminButton"
             onclick="window.location.href = '/admin'"
         >

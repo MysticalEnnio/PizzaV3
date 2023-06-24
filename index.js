@@ -1,6 +1,8 @@
 require("dotenv").config();
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require("express"),
+    bodyParser = require("body-parser"),
+    swaggerJsdoc = require("swagger-jsdoc"),
+    swaggerUi = require("swagger-ui-express");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 var ImageKit = require("imagekit");
@@ -57,6 +59,35 @@ const pusher = new Pusher({
     cluster: "eu",
     useTLS: true,
 });
+
+const options = {
+    definition: {
+        info: {
+            title: "PizzaV3 Express API with Swagger",
+            version: "3.0.0",
+            description:
+                "This is a REST API application made with Express and documented with Swagger",
+            license: {
+                name: "MIT",
+                url: "https://spdx.org/licenses/MIT.html",
+            },
+            contact: {
+                name: "Ennio Marke",
+                url: "https://haus-marke.com",
+                email: "ennio@haus-marke.com",
+            },
+        },
+        servers: [
+            {
+                url: "http://localhost:80",
+            },
+        ],
+    },
+    apis: ["/index.js", "./index.js"],
+};
+
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -484,7 +515,9 @@ app.all("/api/session/data/get", (req, res) => {
         currentSession.length == 0 ||
         currentSession == "123456"
     ) {
-        res.status(500).send("There currently is no session");
+        res.status(500).send(
+            "There currently is no session: " + currentSession
+        );
         return;
     }
     getSessionData(currentSession)
