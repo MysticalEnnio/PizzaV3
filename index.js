@@ -309,6 +309,10 @@ app.get("/api/ingredients/new", (req, res) => {
     sessions
         .get("data")
         .then((data) => {
+            if (!data) {
+                res.status(500).send("No data file found");
+                return;
+            }
             data = data.props;
             delete data.updated;
             delete data.created;
@@ -353,6 +357,10 @@ app.get("/api/ingredients/remove", (req, res) => {
     sessions
         .get("data")
         .then((data) => {
+            if (!data) {
+                res.status(500).send("No data file found");
+                return;
+            }
             data = data.props;
             delete data.updated;
             delete data.created;
@@ -382,6 +390,10 @@ app.get("/api/ingredients/remove", (req, res) => {
 app.get("/api/ingredients/get", (req, res) => {
     log("getting data");
     sessions.get("data").then((data) => {
+        if (!data) {
+            res.status(500).send("No data file found");
+            return;
+        }
         data = data.props;
         delete data.updated;
         delete data.created;
@@ -403,6 +415,10 @@ app.get("/api/options/new", (req, res) => {
     sessions
         .get("data")
         .then((data) => {
+            if (!data) {
+                res.status(500).send("No data file found");
+                return;
+            }
             data = data.props;
             delete data.updated;
             delete data.created;
@@ -441,6 +457,10 @@ app.get("/api/options/remove", (req, res) => {
     sessions
         .get("data")
         .then((data) => {
+            if (!data) {
+                res.status(500).send("No data file found");
+                return;
+            }
             data = data.props;
             delete data.updated;
             delete data.created;
@@ -467,6 +487,10 @@ app.get("/api/options/remove", (req, res) => {
 
 app.get("/api/options/get", (req, res) => {
     sessions.get("data").then((data) => {
+        if (!data) {
+            res.status(500).send("No data file found");
+            return;
+        }
         data = data.props;
         delete data.updated;
         delete data.created;
@@ -548,6 +572,10 @@ function newOrder(order, sessionId) {
             sessions
                 .get(sessionId)
                 .then((data) => {
+                    if (!data) {
+                        res.status(500).send("No data file found");
+                        return;
+                    }
                     data = data.props;
                     delete data.updated;
                     delete data.created;
@@ -574,6 +602,10 @@ function newOrder(order, sessionId) {
         sessions
             .get(sessionId)
             .then((data) => {
+                if (!data) {
+                    res.status(500).send("No data file found");
+                    return;
+                }
                 data = data.props;
                 delete data.updated;
                 delete data.created;
@@ -607,6 +639,10 @@ function initNewSession(ingredients, options) {
         sessions
             .get("data")
             .then((data) => {
+                if (!data) {
+                    res.status(500).send("No data file found");
+                    return;
+                }
                 data = data.props;
                 delete data.updated;
                 delete data.created;
@@ -685,6 +721,10 @@ function getOrders(sessionId) {
         sessions
             .get(sessionId)
             .then((data) => {
+                if (!data) {
+                    res.status(500).send("No data file found");
+                    return;
+                }
                 data = data.props;
                 log(data);
                 if (!data.orders) data.orders = [];
@@ -704,6 +744,10 @@ function getSessionData(sessionId, options = 0) {
         sessions
             .get(sessionId)
             .then((data) => {
+                if (!data) {
+                    res.status(500).send("No data file found");
+                    return;
+                }
                 data = data.props;
                 delete data.updated;
                 delete data.created;
@@ -723,6 +767,10 @@ app.listen(port, () => {
         log(`server running on http://${add}:${port}`);
     });
     sessions.get("data").then((data) => {
+        if (!data) {
+            res.status(500).send("No data file found");
+            return;
+        }
         data = data.props;
         if (data.sessions) {
             log(data.sessions);
@@ -734,6 +782,10 @@ app.listen(port, () => {
             if (currentSession) {
                 //get session data from old session
                 sessions.get(currentSession).then((data) => {
+                    if (!data) {
+                        res.status(500).send("No data file found");
+                        return;
+                    }
                     data = data.props;
                     log("sessionData: " + JSON.stringify(data));
                     if (data) {
