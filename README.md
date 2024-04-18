@@ -1,4 +1,4 @@
-#Pizza
+# Pizza
 
 Priority:
 6 Always getting first in queue
@@ -7,8 +7,9 @@ Every time someone in the queue is passed the queuePower gets decreased by this 
 
 When the queuePower is 1 or lower then places cant be passed
 
-queuePower = (Priority-1\*2)+1 or Priority
-queuePowerToPass = Priority/2
+$queuePower = (Priority-1\*2)+1$ or Priority
+
+$queuePowerToPass = Priority/2$
 
 | Priority | queuePower | queuePowerToPass |
 | -------- | ---------- | ---------------- |
@@ -20,7 +21,7 @@ queuePowerToPass = Priority/2
 
 or
 
-queuePower = 2^x^1.1
+$queuePower = 2^{x^{1.1}}$
 
 | Priority | queuePower | queuePowerToPass |
 | -------- | ---------- | ---------------- |
